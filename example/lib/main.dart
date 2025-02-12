@@ -365,11 +365,11 @@ class MyAppState extends State<MyApp> {
       // Resizes the image to half its original size and reduces the quality to 80%
       final resizedImage = img.copyResize(image!, width: image.width ~/ 1.3, height: image.height ~/ 1.3, interpolation: img.Interpolation.nearest);
       final bytesimg = Uint8List.fromList(img.encodeJpg(resizedImage));
-      //image = img.decodeImage(bytesimg);
+      image = img.decodeImage(bytesimg);
     }
 
     //Using `ESC *`
-    //bytes += generator.image(image!);
+    bytes += generator.image(image!);
 
     bytes += generator.text('Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
     bytes += generator.text('Special 1: ñÑ àÀ èÈ éÉ üÜ çÇ ôÔ', styles: const PosStyles(codeTable: 'CP1252'));
