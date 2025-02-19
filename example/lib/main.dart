@@ -7,6 +7,8 @@ import 'package:print_bluetooth_thermal/post_code.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:image/image.dart' as img;
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal_windows.dart';
+import 'package:intl/intl.dart';
+import 'package:date_formatter/date_formatter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -358,7 +360,7 @@ class MyAppState extends State<MyApp> {
     //bytes += generator.setGlobalFont(PosFontType.fontA);
     bytes += generator.reset();
 
-    final ByteData data = await rootBundle.load('assets/mylogo.jpg');
+    final ByteData data = await rootBundle.load('assets/logo_iumex.jpg');
     final Uint8List bytesImg = data.buffer.asUint8List();
     img.Image? image = img.decodeImage(bytesImg);
 
@@ -372,20 +374,48 @@ class MyAppState extends State<MyApp> {
     //Using `ESC *`
     bytes += generator.image(image!);
 
+// RECUPERANDO LA FECHA Y HORA EN FORMATO 12 HORAS PARA EL TICKET
+String formattedDateTime = DateFormatter.formatDateTime(
+  dateTime: DateTime.now(),
+  outputFormat: 'dd/MM/yyyy hh:mm a', // Formato 12 horas con AM/PM
+);
+print(formattedDateTime);
+
+String formattedStringDateTime = DateFormatter.formatStringDate(
+  date: DateTime.now().toString(),
+  inputFormat: 'yyyy-MM-dd HH:mm:ss',
+  outputFormat: 'dd MMM, yyyy hh:mm a', // Formato 12 horas con AM/PM
+);
+print(formattedStringDateTime);
+
+    //var fecha =  DateFormat.yMMMd().format(DateTime.now());
+    var fecha = formattedDateTime;
+    var fecha_dos = formattedStringDateTime;
    // bytes += generator.text('Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
-    bytes += generator.text('IMPORTADORES UNIDOS MEXICANOS', styles: const PosStyles(codeTable: 'CP1252'));
-     bytes += generator.text('TAMAULIPAS #404, ZONA CENTRO', styles: const PosStyles(codeTable: 'CP1252'));
+    //bytes += generator.text('IMPORTADORES UNIDOS MEXICANOS', styles: const PosStyles(codeTable: 'CP1252'));
+    //bytes += generator.text('TAMAULIPAS #404, ZONA CENTRO', styles: const PosStyles(codeTable: 'CP1252'));
+    bytes += generator.text('IMPORTADORES UNIDOS MEXICANOS', styles: const PosStyles(align: PosAlign.center)); 
+    bytes += generator.text('TAMAULIPAS #404,ZONA CENTRO', styles: const PosStyles(align: PosAlign.center)); 
+    bytes += generator.text('R.F.C. PESF-620710QC2', styles: const PosStyles(align: PosAlign.center)); 
+    bytes += generator.text('TAMPICO, TAMAULIPAS , MEXICO', styles: const PosStyles(align: PosAlign.center)); 
+    bytes += generator.text('C.P 89137 TEL. 8331305234', styles: const PosStyles(align: PosAlign.center)); 
+    bytes += generator.text('${fecha}', styles: const PosStyles(align: PosAlign.left)); 
+    //bytes += generator.text('${fecha_dos}', styles: const PosStyles(align: PosAlign.left)); 
     bytes += generator.text('================================', styles: const PosStyles(codeTable: 'CP1252'));
     bytes += generator.text('CANT DESCRIPCION         IMPORTE', styles: const PosStyles(codeTable: 'CP1252'));
+    bytes += generator.text('TOTAL M.N. ${'100.00'}', styles: const PosStyles(align: PosAlign.right), linesAfter: 1);
     bytes += generator.text('================================', styles: const PosStyles(codeTable: 'CP1252'));
     //bytes += generator.text('Special 1: ñÑ àÀ èÈ éÉ üÜ çÇ ôÔ', styles: const PosStyles(codeTable: 'CP1252'));
     //bytes += generator.text('Special 2: blåbærgrød', styles: const PosStyles(codeTable: 'CP1252'));
-
+    bytes += generator.text('Estimado cliente , si requiere', styles: const PosStyles(align: PosAlign.center)); 
+    bytes += generator.text('factura , favor de solicitarla', styles: const PosStyles(align: PosAlign.center)); 
+    bytes += generator.text('el mismo dia de compra', styles: const PosStyles(align: PosAlign.center)); 
     bytes += generator.text('Bold text', styles: const PosStyles(bold: true));
     bytes += generator.text('Reverse text', styles: const PosStyles(reverse: true));
     bytes += generator.text('Underlined text', styles: const PosStyles(underline: true), linesAfter: 1);
     bytes += generator.text('Align left', styles: const PosStyles(align: PosAlign.left));
-    bytes += generator.text('Align center', styles: const PosStyles(align: PosAlign.center));
+    //bytes += generator.text('Align center', styles: const PosStyles(align: PosAlign.center));
+    bytes += generator.text('¡Visita nuestras redes sociales!', styles: const PosStyles(align: PosAlign.center)); 
     bytes += generator.text('Align right', styles: const PosStyles(align: PosAlign.right), linesAfter: 1);
 
     bytes += generator.row([
